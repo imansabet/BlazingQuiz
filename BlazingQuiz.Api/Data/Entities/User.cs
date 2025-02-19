@@ -18,4 +18,6 @@ public class User
     public string HashedPassword { get; set; }
     [MaxLength(15)]
     public string Role { get; set; } = nameof(UserRole.Student);
+    public  bool  IsApproved { get; set; }
+
 }

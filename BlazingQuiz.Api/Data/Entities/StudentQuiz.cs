@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazingQuiz.Api.Data.Entities;
 
+
+// many to many  :   user <=> quiz
 public class StudentQuiz
 {
     [Key]
