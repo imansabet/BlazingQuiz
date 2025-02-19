@@ -11,4 +11,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.0" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BlazingQuiz.Sahred.Components\BlazingQuiz.Shared.Components.csproj" />
+    <ProjectReference Include="..\BlazingQuiz.Shared\BlazingQuiz.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
