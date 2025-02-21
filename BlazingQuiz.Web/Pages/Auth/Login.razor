@@ -1,6 +1,9 @@
 ﻿@page "/auth/login"
 @layout EmptyLayout
 
+@inject NavigationManager NavigationManager
+@inject IAuthApi AuthApi
+
 <div class="container">
     <div class="row vh-100">
         <div class="col-sm-4 mx-auto my-auto  border shadow-lg ">
@@ -19,9 +22,15 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" >Password: </label>
-                    <InputText typeof="password" @bind-Value="_model.Password" class="form-control" />    
+                    <InputText type="password" @bind-Value="_model.Password" class="form-control" />
                     <ValidationMessage For="() => _model.Password"></ValidationMessage>
                 </div>
+                @if(_error != null)
+                {
+                    <div class="mb-3 bg-danger text-white p-2" >
+                        <p>@_error</p>
+                    </div>
+                }
                 <div class="mb-3" >
                     @if(!_isBusy)
                     {
@@ -41,12 +50,33 @@
     private LoginDto _model = new();
 
     private bool _isBusy;
+    private string? _error;
 
     private async Task LoginAsync()
     {
+        _error = null;
         _isBusy = true;
-        await Task.Delay(2000);
-        _isBusy = false;
+        try
+        {
+            var authResponse = await AuthApi.LoginAsync(_model);
+            if(authResponse.HasError)
+            {
+                _error = authResponse.ErrorMessage;
+                return;
+
+            }
+            // Save login Token 
+
+            NavigationManager.NavigateTo("/");
+        }
+        catch(Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isBusy = false;
+        }
 
     }
 }
