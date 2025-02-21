@@ -1,5 +1,6 @@
 ﻿using BlazingQuiz.Api.Data;
 using BlazingQuiz.Api.Data.Entities;
+using BlazingQuiz.Shared;
 using BlazingQuiz.Shared.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -41,8 +42,10 @@ public class AuthServices
         }
         // Generate JWt
         var jwt = GenereateJwtToken(user);
+        var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Role, jwt);
 
-        return new AuthResponseDto(jwt);
+
+        return new AuthResponseDto(loggedInUser);
     }
 
     private string GenereateJwtToken(User user)

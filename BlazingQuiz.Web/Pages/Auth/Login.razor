@@ -3,6 +3,7 @@
 
 @inject NavigationManager NavigationManager
 @inject IAuthApi AuthApi
+@inject QuizAuthStateProvider QuizAuthStateProvider
 
 <div class="container">
     <div class="row vh-100">
@@ -11,6 +12,24 @@
                 <h1 class="h3"> 
                     Login | Blazing Quiz
                 </h1>
+
+                <AuthorizeView>
+                    <Authorizing>
+                        <p>Authorizing . . . </p>
+                    </Authorizing>
+                    <NotAuthorized>
+                        <p>
+                            Not Authorized
+                        </p>
+                    </NotAuthorized>
+                    <Authorized>
+                        <p>
+                            Authorized: @context.User?.FindFirst(ClaimTypes.Name)?.Value
+                        </p>
+                    </Authorized>
+                </AuthorizeView>
+
+
                 <hr />
             </div>
             <EditForm  Model="_model" OnValidSubmit="LoginAsync" >
@@ -66,6 +85,9 @@
 
             }
             // Save login Token 
+
+            var loggedInUser = authResponse.User;
+            await QuizAuthStateProvider.SetLoginAsync(loggedInUser);
 
             NavigationManager.NavigateTo("/");
         }
