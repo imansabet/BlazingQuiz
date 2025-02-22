@@ -34,7 +34,7 @@ public class QuizAuthStateProvider : AuthenticationStateProvider
         await _jSRuntime.InvokeVoidAsync("localStorage.setItem", UserDataKey, loggedInUser.ToJson());
     }
 
-    public async Task SetLogoutAsync(LoggedInUser loggedInUser)
+    public async Task SetLogoutAsync()
     {
         LoggedInUser = null;
         SetAuthStateTask();
