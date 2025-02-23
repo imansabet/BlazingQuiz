@@ -58,7 +58,10 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddTransient<AuthServices>();
+// transient => suitable for stateless services
+
+builder.Services.AddTransient<AuthServices>()
+    .AddTransient<CategoryService>();
 
 
 var app = builder.Build();
@@ -76,7 +79,8 @@ app.UseCors();
 app.UseAuthentication();
 
 
-app.MapAuthEndpoints();
+app.MapAuthEndpoints()
+    .MapCategoryEndpoints();
 
 #if DEBUG
 ApplyDbMigrations(app.Services);
