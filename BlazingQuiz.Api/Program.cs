@@ -43,6 +43,7 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
@@ -76,7 +77,8 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-app.UseAuthentication();
+app.UseAuthentication()
+    .UseAuthorization();
 
 
 app.MapAuthEndpoints()

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
+using System.Net.Http;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -22,10 +23,28 @@ ConfigureRefit(builder.Services);
 
 await builder.Build().RunAsync();
 
-
+   
 static void ConfigureRefit(IServiceCollection services)
 {
     const string ApiBaseUrl = "https://localhost:7038";
     services.AddRefitClient<IAuthApi>()
-        .ConfigureHttpClient(httpclient => httpclient.BaseAddress = new Uri(ApiBaseUrl));
+        .ConfigureHttpClient(SetHttpClient);
+
+    services.AddRefitClient<ICategoryApi>(GetRefitSettings)
+    .ConfigureHttpClient(SetHttpClient);
+
+
+    static void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(ApiBaseUrl);
+
+
+    static RefitSettings GetRefitSettings(IServiceProvider sp)
+    {
+        var authStateProvider = sp.GetRequiredService<QuizAuthStateProvider>();
+
+        return new RefitSettings
+        {
+            AuthorizationHeaderValueGetter = (_, __) => Task.FromResult(authStateProvider.LoggedInUser?.Token ?? "")
+        };
+    }
+
 }
