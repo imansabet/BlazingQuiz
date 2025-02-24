@@ -1,11 +1,13 @@
 ﻿@page "/admin/add-quiz"
 @inject IQuizApi QuizApi
 @inject ICategoryApi CategoryApi
+@inject IJSRuntime JsRunTime
+@inject NavigationManager NavigationManager
 
 <h1>Add New Quiz </h1>
 <hr/>
 
-<EditForm Model="_quiz">
+<EditForm Model="_quiz" OnValidSubmit="SaveQuizAsync">
     <DataAnnotationsValidator />
     <div class="row">
         <div class="col-sm-3">
@@ -88,6 +90,9 @@
                 </div>
             </div>
         </div>
+        <hr />
+
+        <button type="submit" class="btn btn-success w-25 m-3 p-3 justify-content-center"> Save Quiz </button>
     </div>
 </EditForm>
 
@@ -118,5 +123,26 @@
         }
         optionDto.IsCorrect = true;
     }
+
+    private async Task SaveQuizAsync()
+    {
+        var errorMEssage = _quiz.Validate();
+        if(!string.IsNullOrEmpty(errorMEssage))
+        {
+            await ShowAlertAsync(errorMEssage);
+            return;
+        }
+        var response = await QuizApi.SaveQuizAsync(_quiz);
+        if(!response.IsSuccess)
+        {
+            await ShowAlertAsync(errorMEssage);
+            return;
+        }
+        NavigationManager.NavigateTo("admin/manage-quizes");
+
+    }
+    private async Task ShowAlertAsync(string message, string title = "Error") => 
+        await JsRunTime.InvokeVoidAsync("alert", $"{title}\n{message}");
+    
 
 }

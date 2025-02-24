@@ -84,7 +84,8 @@ app.UseAuthentication()
 
 
 app.MapAuthEndpoints()
-    .MapCategoryEndpoints();
+    .MapCategoryEndpoints()
+    .MapQuizEndpoints();
 
 #if DEBUG
 ApplyDbMigrations(app.Services);
