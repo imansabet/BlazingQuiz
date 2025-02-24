@@ -61,8 +61,10 @@ builder.Services.AddCors(options =>
 
 // transient => suitable for stateless services
 
-builder.Services.AddTransient<AuthServices>()
-    .AddTransient<CategoryService>();
+builder.Services
+    .AddTransient<AuthServices>()
+    .AddTransient<CategoryService>()
+    .AddTransient<QuizService>();
 
 
 var app = builder.Build();
