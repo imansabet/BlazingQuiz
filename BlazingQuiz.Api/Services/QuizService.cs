@@ -69,4 +69,27 @@ public class QuizService
         }
     }
 
+    public async Task<QuizListDto[]> GetQuizesAsync()
+    {
+        return await _context.Quizzes.Select(quiz => new QuizListDto
+        {
+            Id = quiz.Id,
+            Name    = quiz.Name,
+            TimeInMinutes = quiz.TimeInMinutes,
+            TotalQuestion = quiz.TotalQuestion,
+            IsActive = quiz.IsActive,
+            CategoryName = quiz.Category.Name,
+            CategoryId = quiz.Category.Id
+        }).ToArrayAsync();
+    }
+    public async Task<QuestionDto[]> GetQuizQuestionsAsync(Guid quizId) =>
+         await _context.Questions.Where(q => q.QuizId == quizId)
+            .Select(q => new QuestionDto
+            {
+                Id= q.Id,
+                Text = q.Text
+            }).ToArrayAsync();
+
+
+    
 }

@@ -20,7 +20,16 @@ public static class QuizEndpoints
 
 
              return Results.Ok(await quizService.SaveQuizAsync(saveQuizDto));
-        });          
+        });
+
+        quizGroup.MapGet("", async (QuizService service) =>
+                Results.Ok(await service.GetQuizesAsync()));
+
+        quizGroup.MapGet("{quizId:guid}/questions", async (Guid quizId , QuizService quizService) =>
+        {
+            Results.Ok(await quizService.GetQuizQuestionsAsync(quizId));
+        });
+
 
         return app;
     }

@@ -9,4 +9,12 @@ public interface IQuizApi
 {
     [Post("/api/quizes")]
     Task<QuizApiResponse> SaveQuizAsync(SaveQuizDto saveQuizDto);
+
+    [Get("/api/quizes")]
+    Task<QuizListDto[]> GetQuizesAsync();
+
+    [Get("/api/quizes/{quizId}/questions}")]
+    Task<QuestionDto[]> GetQuizQuestionsAsync(Guid quizId);
+    
+    
 }
