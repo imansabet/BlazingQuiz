@@ -15,6 +15,8 @@ public interface IQuizApi
 
     [Get("/api/quizes/{quizId}/questions")]
     Task<QuestionDto[]> GetQuizQuestionsAsync(Guid quizId);
-    
-    
+
+    [Get("/api/quizes/{quizId}")]
+    Task<SaveQuizDto?> GetQuizToEditAsync(Guid quizId);
+
 }

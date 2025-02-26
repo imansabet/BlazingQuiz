@@ -31,6 +31,10 @@ public static class QuizEndpoints
         });
 
 
+        quizGroup.MapGet("{quizId:guid}", async (Guid quizId, QuizService service) =>
+            Results.Ok(await service.GetQuizToEditAsync(quizId)));
+            
+
         return app;
     }
 }

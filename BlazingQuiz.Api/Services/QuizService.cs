@@ -92,5 +92,34 @@ public class QuizService
             }).ToArrayAsync();
 
 
+    public async Task<SaveQuizDto?> GetQuizToEditAsync(Guid quizId) 
+    {
+        var quiz = await _context.Quizzes
+        .Where(q => q.Id == quizId)
+        .Select(qz => new SaveQuizDto
+        {
+            Id = qz.Id,
+            CategoryId = qz.Category.Id,
+            IsActive = qz.IsActive,
+            Name = qz.Name,
+            TimeInMinutes = qz.TimeInMinutes,
+            TotalQuestion = qz.TotalQuestion,
+            Questions = qz.Questions
+                .Select(q => new QuestionDto
+                {
+                    Id = q.Id,
+                    Text = q.Text,
+                    Options = q.Options.Select(o => new OptionDto
+                    {
+                        Text = o.Text,
+                        Id = o.Id,
+                        IsCorrect = o.IsCorrect
+                    }).ToList()
+                }).ToList()
+        }).FirstOrDefaultAsync();
+        return quiz;
+  
+    }
+
     
 }
