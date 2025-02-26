@@ -21,6 +21,7 @@ public class QuizService
             Text = q.Text,
             Options = q.Options.Select(o => new Option
             {
+                Id = o.Id,
                 Text = o.Text,
                 IsCorrect = o.IsCorrect
             }).ToArray()

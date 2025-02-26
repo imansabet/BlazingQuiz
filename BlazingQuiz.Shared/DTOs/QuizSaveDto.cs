@@ -43,17 +43,3 @@ public  class SaveQuizDto
 
 
 }
-public class OptionDto 
-{
-    public int Id { get; set; }
-    [Required,MaxLength(200)]
-    public string Text { get; set; }
-    public bool IsCorrect { get; set; }
-}
-public class QuestionDto
-{
-    public int Id { get; set; }
-    [Required,MaxLength(200)]
-    public string Text { get; set; }
-    public List<OptionDto> Options { get; set; }
-}

@@ -25,9 +25,9 @@ public static class QuizEndpoints
         quizGroup.MapGet("", async (QuizService service) =>
                 Results.Ok(await service.GetQuizesAsync()));
 
-        quizGroup.MapGet("{quizId:guid}/questions", async (Guid quizId , QuizService quizService) =>
+        quizGroup.MapGet("{quizId:guid}/questions", async (Guid quizId , QuizService service) =>
         {
-            Results.Ok(await quizService.GetQuizQuestionsAsync(quizId));
+            return Results.Ok(await service.GetQuizQuestionsAsync(quizId));
         });
 
 
