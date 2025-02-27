@@ -32,6 +32,8 @@ public class AuthServices
         {
             return new AuthResponseDto(default , "Invalid User Name");
         }
+        if (!user.IsApproved)
+            return new AuthResponseDto(default, "Your Acount Is Not Approved . ");
 
         var passwordResult = _passwordHasher.VerifyHashedPassword(user, user.HashedPassword, loginDto.Password);
     
@@ -47,6 +49,37 @@ public class AuthServices
 
         return new AuthResponseDto(loggedInUser);
     }
+
+
+    public async Task<QuizApiResponse> RegisterAsync(RegisterDto registerDto)
+    {
+        if(await _context.User.AnyAsync(u=> u.Email == registerDto.Email))
+        {
+            return QuizApiResponse.Fail("Email Already Exists , Try Logging in ");
+        }
+        var user = new User
+        {
+            Email = registerDto.Email,
+            Name = registerDto.Name,
+            Phone = registerDto.Phone,
+            Role = nameof(UserRole.Student),
+            IsApproved = false,
+
+        };
+        user.HashedPassword = _passwordHasher.HashPassword(user, registerDto.Password);
+        _context.User.Add(user);
+        try
+        {
+            await _context.SaveChangesAsync();
+            return QuizApiResponse.Success();
+        }
+        catch (Exception ex)
+        {
+            return QuizApiResponse.Fail(ex.Message);
+        }
+    }
+
+
 
     private string GenereateJwtToken(User user)
     {

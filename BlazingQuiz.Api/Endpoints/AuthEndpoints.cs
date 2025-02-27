@@ -11,6 +11,12 @@ public static class AuthEndpoints
             Results.Ok(await authService.LoginAsync(loginDto))
             );
 
+        app.MapPost("/api/auth/register", async (RegisterDto registerDto , AuthServices authService) =>
+           Results.Ok(await authService.RegisterAsync(registerDto))
+           );
+
         return app;
     }
+
+
 }
