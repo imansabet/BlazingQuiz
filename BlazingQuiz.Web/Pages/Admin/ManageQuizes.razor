@@ -5,12 +5,15 @@
 
 @using BlazingQuiz.Shared.Components.Components
 
+<SectionContent SectionName="pageTitle">Manage Quizes</SectionContent>
+
+
+
 <div class="container">
-    <h1>Manage Quizes</h1>
-    <hr />
+    
 
     <div class="row">
-        <div class="col-sm-3 ms-auto" >
+        <div class="col-sm-3 ms-auto mb-2" >
             <label class="form-label">Select Category</label>
             <select class="form-control" @bind="_selectedCategory" @bind:after="OnSelectedCategoryChanged">
                 <option value="0">Select Category</option>
@@ -37,7 +40,7 @@
                 {
                     <tr>
                         <td colspan="5">
-                            <p class="text-danger">No Quizes Found</p>
+                            <p class="text-danger text-center h-5">No Quizes Found</p>
                         </td>
                     </tr>
                 }
