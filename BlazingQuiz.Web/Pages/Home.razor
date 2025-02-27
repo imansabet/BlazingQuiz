@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
 @inject QuizAuthStateProvider QuizAuthStateProvider
+@attribute [Authorize]
 
 <PageTitle>Home</PageTitle>
 <SectionContent SectionName="pageTitle">Home</SectionContent>
