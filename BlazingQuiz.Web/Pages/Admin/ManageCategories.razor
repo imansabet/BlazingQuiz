@@ -1,6 +1,6 @@
 ﻿@page "/admin/manage-categories"
 @inject ICategoryApi CategoryApi
-
+@inject IAppState AppState
 
 <SectionContent SectionName="pageTitle">Manage Categories</SectionContent>
 
@@ -101,7 +101,10 @@
 
     private async Task LoadCategoriesAsync()
     {
+        AppState.ShowLoader("Getting Categories . . . ");
+        await Task.Delay(500);
         _categories = await CategoryApi.GetCategoriesAsync();
+        AppState.HideLoader();
     }
 
     private void OnEditCategory(CategoryDto categoryDto )
@@ -112,6 +115,9 @@
     {
         try 
         {
+            AppState.ShowLoader("Saving Category ."); 
+            await Task.Delay(500);
+
             _isBusy = true;
             var response = await CategoryApi.SaveCategoryAsync(_category);
             if (!response.IsSuccess) 
@@ -130,6 +136,7 @@
         finally
         {
 
+            AppState.HideLoader();
             _isBusy = false;
         }
 

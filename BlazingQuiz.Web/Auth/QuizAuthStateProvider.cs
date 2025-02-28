@@ -103,10 +103,10 @@ public class QuizAuthStateProvider : AuthenticationStateProvider
 
         var expTime = long.Parse(expClaim.Value);
         
-        var expDateTimeToUtc =  DateTimeOffset.FromUnixTimeMilliseconds(expTime).UtcDateTime;
+        var expDateTimeToUtc =  DateTimeOffset.FromUnixTimeSeconds(expTime).UtcDateTime;
 
 
-        return expDateTimeToUtc < DateTime.UtcNow;
+        return expDateTimeToUtc > DateTime.UtcNow;
     }
 
 

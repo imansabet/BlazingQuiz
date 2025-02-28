@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Authorization
 @inject QuizAuthStateProvider QuizAuthStateProvider
 @attribute [Authorize]
+@inject IAppState AppState
 
 <PageTitle>Home</PageTitle>
 <SectionContent SectionName="pageTitle">Home</SectionContent>

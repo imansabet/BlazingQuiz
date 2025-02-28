@@ -2,6 +2,7 @@
 
 @inject IQuizApi QuizApi
 @inject ICategoryApi CategoryApi
+@inject IAppState AppState
 
 @using BlazingQuiz.Shared.Components.Components
 
@@ -10,7 +11,7 @@
 
 
 <div class="container">
-    
+
 
     <div class="row">
         <div class="col-sm-3 ms-auto mb-2" >
@@ -102,10 +103,22 @@
 
     protected async override Task OnInitializedAsync()
     {
-        var quizesTask = QuizApi.GetQuizesAsync();
-        _categories = await CategoryApi.GetCategoriesAsync();
-        _quizzes = await quizesTask;
-        _filteredQuizzes = _quizzes;
+        AppState.ShowLoader("Fetching Quizes & Categories . . ");
+        try
+        {
+            var quizesTask = QuizApi.GetQuizesAsync();
+            _categories = await CategoryApi.GetCategoriesAsync();
+            _quizzes = await quizesTask;
+            _filteredQuizzes = _quizzes;
+        }
+        catch (Exception ex) 
+        {
+            throw;
+        }
+        finally 
+        {
+            AppState.HideLoader();
+        }
     }
     private void OnSelectedCategoryChanged()
     {
@@ -123,8 +136,9 @@
 
     private async Task ViewQuestionsAsync(QuizListDto q) 
     {
+        AppState.ShowLoader("Fetching Questions . . .");
         _viewingQuestions = await QuizApi.GetQuizQuestionsAsync(q.Id);
-
+        AppState.HideLoader();
         _showQuestionsModal = true;
     }
 

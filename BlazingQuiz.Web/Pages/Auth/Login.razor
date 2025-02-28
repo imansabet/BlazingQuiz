@@ -4,6 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject IAuthApi AuthApi
 @inject QuizAuthStateProvider QuizAuthStateProvider
+@inject IAppState AppState
 
 <div class="container">
     <div class="row vh-100">
@@ -60,7 +61,7 @@
         if (QuizAuthStateProvider.IsLoggedIn)
         {
             NavigationManager.NavigateTo("/", replace: true);
-            
+
         }
 
     }
@@ -71,6 +72,7 @@
         _isBusy = true;
         try
         {
+            AppState.ShowLoader("Logging in . . .");
             var authResponse = await AuthApi.LoginAsync(_model);
             if(authResponse.HasError)
             {
@@ -92,6 +94,7 @@
         finally
         {
             _isBusy = false;
+            AppState.HideLoader();
         }
 
     }

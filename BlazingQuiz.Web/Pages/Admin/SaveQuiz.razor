@@ -4,6 +4,8 @@
 @inject IQuizApi QuizApi
 @inject ICategoryApi CategoryApi
 @inject IJSRuntime JsRunTime
+@inject IAppState AppState
+
 @inject NavigationManager NavigationManager
 
 <SectionContent SectionName="pageTitle">@(IsEditCase ? "Update Quiz" : "Add New Quiz")</SectionContent>
@@ -48,7 +50,7 @@
 
         <hr class="my-2" />
         <h3 class="fw-bold">Questions</h3>
-        
+
         <ol class="mb-0">
             @foreach (var q in _quiz.Questions)
             {
@@ -86,7 +88,7 @@
 
         <hr />
         <div class="row mb-5 align-items-center">
-             <div class="col-sm-3 ms-auto d-flex justify-content-end">
+            <div class="col-sm-3 ms-auto d-flex justify-content-end">
                 <div class="form-check form-switch">
                     <InputCheckbox @bind-Value="_quiz.IsActive" class="form-check-input" type="checkbox" role="switch" id="quizIsActive" checked></InputCheckbox>
                     <label class="form-check-label" for="quizIsActive">is Active ?</label>
@@ -96,7 +98,7 @@
                 <button type="submit" class="btn btn-success w-25 m-3 p-3 justify-content-center"> Save Quiz </button>
             </div>
         </div>
-       
+
     </div>
 </EditForm>
 
@@ -114,7 +116,9 @@
         if(IsEditCase)
         {
             // Fetch _quiz from Api
+            AppState.ShowLoader("Fetching Quizes . . .");
             var quiz = await QuizApi.GetQuizToEditAsync(QuizId!.Value);
+            AppState.HideLoader();
             if(quiz == null)
             {
                 NavigationManager.NavigateTo("admin/manage-quizes");
@@ -128,8 +132,10 @@
             _quiz.Questions = [question];
         }
 
+        AppState.ShowLoader("Fetching Categories . . .");
 
         _categories = await CategoryApi.GetCategoriesAsync();
+        AppState.HideLoader();
     }
 
 
@@ -167,7 +173,11 @@
             await ShowAlertAsync(errorMEssage);
             return;
         }
+        AppState.ShowLoader("Saving Quiz . . .");
+
         var response = await QuizApi.SaveQuizAsync(_quiz);
+        AppState.HideLoader();
+
         if(!response.IsSuccess)
         {
             await ShowAlertAsync(errorMEssage);
