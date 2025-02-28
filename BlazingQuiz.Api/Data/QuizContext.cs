@@ -21,13 +21,15 @@ public class QuizContext : DbContext
     public DbSet<Question> Questions { get; set; }
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<StudentQuiz> StudentQuizzes { get; set; }
-    public DbSet<User> User { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
         optionsBuilder.ConfigureWarnings(warnings =>
             warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+    
+        
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -46,8 +48,11 @@ public class QuizContext : DbContext
         adminUser.HashedPassword = _passwordHasher.HashPassword(adminUser, "Aa123456");
 
         modelBuilder.Entity<User>()
-            .HasData(adminUser);  
+            .HasData(adminUser);
 
-        }
+
+        //modelBuilder.Entity<User>().ToTable("Users");
+
+    }
 
 }

@@ -188,14 +188,14 @@ namespace BlazingQuiz.Api.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Email = "admin@gmail.com",
-                            HashedPassword = "AQAAAAIAAYagAAAAEKkh6SDWmDhY0CyUlvwKqH3mmSD5HGqHvFrSWTVtY9eM7R1BGpc9oAwkGf1M8fcWXg==",
+                            HashedPassword = "AQAAAAIAAYagAAAAEK0lYyAXoHXbBim/T58dfnWqGF6VTGnmfMjVNfoN685NdHAxt3WTnmpUhtzD+FcAHg==",
                             IsApproved = true,
                             Name = "Iman Sabet",
                             Phone = "1230",

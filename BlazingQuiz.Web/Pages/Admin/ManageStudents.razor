@@ -1,0 +1,80 @@
+﻿@page "/admin/manage-students"
+@inject IUserApi UserApi
+
+<SectionContent SectionName="pageTitle">Manage Students</SectionContent>
+<div class="row">
+    <div class="col-sm-4 ms-auto mb-3">
+        <label>
+            Filter By Approval Status
+        </label>
+        <select class="from-control" @bind="_filter"  @bind:after="OnApprovalFilterChangedAsync">
+            @foreach(var f in Enum.GetValues<UserApprovalFilter>())
+            {
+                <option value="@f">@f</option>
+            }
+        </select>
+    </div>
+</div>
+<div class="row">
+    <QuickGrid ItemsProvider="_usersProvider" @ref="_grid" Pagination="_paginationState" Class="table table-stripped table-hover">
+        <PropertyColumn Property="u => u.Id" />
+        <PropertyColumn Property="u => u.Name" />
+        <PropertyColumn Property="u => u.Email" />
+        <PropertyColumn Property="u => u.Phone" />
+        <TemplateColumn Title="Is Approved?">
+            <div class="col-sm-3 ms-auto d-flex justify-content-end">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" checked="@(context.IsApproved)" type="checkbox" role="switch" id="user_@context.Id" @onchange="() => OnUserApprovalToggleAsync(context)" />
+                    <label class="form-check-label" for="user_@context.Id">
+                        @(context.IsApproved ? "Yes" : "No")
+                    </label>
+                </div>
+            </div>
+        </TemplateColumn>
+    </QuickGrid>
+    <Paginator State="_paginationState" />
+</div>
+
+@code {
+    private const int DefaultPageSize = 10;
+
+    private QuickGrid<UserDto>? _grid;
+    private GridItemsProvider<UserDto> _usersProvider;
+    private PaginationState _paginationState = new PaginationState { ItemsPerPage = DefaultPageSize };
+
+
+    private UserApprovalFilter _filter = UserApprovalFilter.All;
+
+
+
+    protected override void OnInitialized()
+    {
+        _usersProvider = async request =>
+        {
+            var pagedResult = await UserApi.GetUsersAsync(_filter, request.StartIndex, request.Count ?? DefaultPageSize);
+            return GridItemsProviderResult.From(pagedResult.Records, pagedResult.TotalCount);
+
+        };
+    }
+    private async Task OnUserApprovalToggleAsync(UserDto userDto) 
+    {
+        userDto.IsApproved = !userDto.IsApproved;
+        _shouldReRender = false;
+        await UserApi.ToggleUserApprovalStatus(userDto.Id);
+        _shouldReRender = true;
+    }
+
+    private bool _shouldReRender = true;
+    protected override bool ShouldRender() => _shouldReRender;
+
+
+    private async Task OnApprovalFilterChangedAsync()
+    {
+        if (_grid != null)
+            await _grid.RefreshDataAsync();
+    }
+
+}
+
+
+

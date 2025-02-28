@@ -24,7 +24,7 @@ public class AuthServices
     }
     public async Task<AuthResponseDto> LoginAsync(LoginDto loginDto)
     {
-        var user = await _context.User
+        var user = await _context.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Email == loginDto.UserName);
     
@@ -32,6 +32,7 @@ public class AuthServices
         {
             return new AuthResponseDto(default , "Invalid User Name");
         }
+
         if (!user.IsApproved)
             return new AuthResponseDto(default, "Your Acount Is Not Approved . ");
 
@@ -53,7 +54,7 @@ public class AuthServices
 
     public async Task<QuizApiResponse> RegisterAsync(RegisterDto registerDto)
     {
-        if(await _context.User.AnyAsync(u=> u.Email == registerDto.Email))
+        if(await _context.Users.AnyAsync(u=> u.Email == registerDto.Email))
         {
             return QuizApiResponse.Fail("Email Already Exists , Try Logging in ");
         }
@@ -67,7 +68,7 @@ public class AuthServices
 
         };
         user.HashedPassword = _passwordHasher.HashPassword(user, registerDto.Password);
-        _context.User.Add(user);
+        _context.Users.Add(user);
         try
         {
             await _context.SaveChangesAsync();

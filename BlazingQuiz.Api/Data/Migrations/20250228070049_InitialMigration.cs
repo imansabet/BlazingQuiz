@@ -25,7 +25,7 @@ namespace BlazingQuiz.Api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -39,7 +39,7 @@ namespace BlazingQuiz.Api.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,9 +106,9 @@ namespace BlazingQuiz.Api.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentQuizzes_User_StudentId",
+                        name: "FK_StudentQuizzes_Users_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -135,9 +135,9 @@ namespace BlazingQuiz.Api.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "User",
+                table: "Users",
                 columns: new[] { "Id", "Email", "HashedPassword", "IsApproved", "Name", "Phone", "Role" },
-                values: new object[] { 1, "admin@gmail.com", "AQAAAAIAAYagAAAAEKkh6SDWmDhY0CyUlvwKqH3mmSD5HGqHvFrSWTVtY9eM7R1BGpc9oAwkGf1M8fcWXg==", true, "Iman Sabet", "1230", "Admin" });
+                values: new object[] { 1, "admin@gmail.com", "AQAAAAIAAYagAAAAEK0lYyAXoHXbBim/T58dfnWqGF6VTGnmfMjVNfoN685NdHAxt3WTnmpUhtzD+FcAHg==", true, "Iman Sabet", "1230", "Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Options_QuestionId",
@@ -178,7 +178,7 @@ namespace BlazingQuiz.Api.Data.Migrations
                 name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Quizzes");

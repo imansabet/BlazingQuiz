@@ -64,7 +64,8 @@ builder.Services.AddCors(options =>
 builder.Services
     .AddTransient<AuthServices>()
     .AddTransient<CategoryService>()
-    .AddTransient<QuizService>();
+    .AddTransient<QuizService>()
+    .AddTransient<UserService>();
 
 
 var app = builder.Build();
@@ -85,7 +86,8 @@ app.UseAuthentication()
 
 app.MapAuthEndpoints()
     .MapCategoryEndpoints()
-    .MapQuizEndpoints();
+    .MapQuizEndpoints()
+    .MapUserEndpoints();
 
 #if DEBUG
 ApplyDbMigrations(app.Services);
