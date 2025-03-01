@@ -60,8 +60,7 @@
     {
         if (QuizAuthStateProvider.IsLoggedIn)
         {
-            NavigationManager.NavigateTo("/", replace: true);
-
+            RedirectToHome(replace: true);
         }
 
     }
@@ -85,7 +84,9 @@
             var loggedInUser = authResponse.User;
             await QuizAuthStateProvider.SetLoginAsync(loggedInUser);
 
-            NavigationManager.NavigateTo("/");
+
+
+            RedirectToHome();
         }
         catch(Exception ex)
         {
@@ -96,6 +97,16 @@
             _isBusy = false;
             AppState.HideLoader();
         }
+
+    }
+    private void RedirectToHome(bool replace = false) 
+    {
+        var redirectTo = QuizAuthStateProvider.LoggedInUser.Role switch
+        {
+            nameof(UserRole.Student) => "student/home",
+            _ => "/"
+        };
+        NavigationManager.NavigateTo(redirectTo, replace);
 
     }
 }

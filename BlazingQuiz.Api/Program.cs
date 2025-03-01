@@ -65,7 +65,8 @@ builder.Services
     .AddTransient<AuthServices>()
     .AddTransient<CategoryService>()
     .AddTransient<QuizService>()
-    .AddTransient<UserService>();
+    .AddTransient<UserService>()
+    .AddTransient<StudentQuizService>();
 
 
 var app = builder.Build();
@@ -87,7 +88,8 @@ app.UseAuthentication()
 app.MapAuthEndpoints()
     .MapCategoryEndpoints()
     .MapQuizEndpoints()
-    .MapUserEndpoints();
+    .MapUserEndpoints()
+    .MapStudentQuizEndpoints();
 
 #if DEBUG
 ApplyDbMigrations(app.Services);
