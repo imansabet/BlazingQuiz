@@ -1,0 +1,23 @@
+﻿@page "/student/quiz"
+@inject QuizState QuizState
+@inject NavigationManager NavigationManager
+
+
+
+
+
+
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (QuizState.Quiz == null) 
+        {
+            NavigationManager.NavigateTo("student/home", replace: true);
+            return;
+        }
+
+
+    }
+}

@@ -22,6 +22,7 @@ public class QuizContext : DbContext
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<StudentQuiz> StudentQuizzes { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<StudentQuizQuestion> StudentQuizQuestions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -34,6 +35,9 @@ public class QuizContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<StudentQuizQuestion>()
+            .HasKey(s => new { s.StudentQuizId, s.QuestionId });
+
         base.OnModelCreating(modelBuilder);
         var adminUser = new User
         {

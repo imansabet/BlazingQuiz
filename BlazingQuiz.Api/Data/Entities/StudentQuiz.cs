@@ -12,9 +12,15 @@ public class StudentQuiz
     public int StudentId { get; set; }
     public Guid QuizId { get; set; }
     public DateTime StartedOn { get; set; }
-    public DateTime CompletedOn { get; set; }
+    public DateTime? CompletedOn { get; set; }
     public int Score { get; set; }
 
+
+    [AllowedValues(nameof(StudentQuizStatus.Started)
+        , nameof(StudentQuizStatus.Completed)
+        , nameof(StudentQuizStatus.Exited)
+        , nameof(StudentQuizStatus.AutoSubmitted))]
+    public string Status { get; set; } = nameof(StudentQuizStatus.Started);
 
 
     [ForeignKey(nameof(StudentId))]
@@ -22,5 +28,8 @@ public class StudentQuiz
 
     [ForeignKey(nameof(QuizId))]
     public virtual Quiz Quiz { get; set; }
+
+
+    public virtual ICollection<StudentQuizQuestion> StudentQuizQuestions { get; set; } = [];
 
 }
